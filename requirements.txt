@@ -1,0 +1,15 @@
+threading
+queue
+Pillow
+google-generativeai
+opencv-python
+pyperclip
+SpeechRecognition
+pyttsx3
+pytesseract
+numpy
+pygame
+openai
+gtts
+pyaudio
+groq
