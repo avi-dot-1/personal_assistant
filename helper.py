@@ -71,3 +71,48 @@ def get_clipboard_text():
     else:
         print('Nothing found in clipboard')
         return None
+# analyzing the intent
+def analyze_user_intent():
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    
+    ret, frame = web_cam.read()
+    if not ret:
+        return "No camera feed available"
+    
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    
+    if len(faces) == 0:
+        return "No face detected"
+    
+    # Analyze the largest face
+    (x, y, w, h) = max(faces, key=lambda face: face[2] * face[3])
+    face_roi = frame[y:y+h, x:x+w]
+    
+    # Simple heuristics for user intent (you might want to use a more sophisticated model)
+    avg_pixel = cv2.mean(face_roi)[0]
+    if avg_pixel < 100:  # Dark image, user might be looking away
+        return "User might not be paying attention"
+    elif avg_pixel > 200:  # Bright image, user might be engaged
+        return "User seems engaged"
+    else:
+        return "User's intent unclear"
+
+#opening apps
+def open_app(app_name):
+    app_map = {
+        'youtube': 'https://www.youtube.com',
+        'reddit': 'https://www.reddit.com',
+        'twitter': 'https://www.twitter.com',
+        'chrome': 'google-chrome',
+        'vs code': 'code'  # Assuming 'code' is the command to open VS Code
+    }
+    
+    if app_name in app_map:
+        if app_name in ['youtube', 'reddit', 'twitter']:
+            webbrowser.open(app_map[app_name])
+        else:
+            subprocess.Popen(app_map[app_name])
+        speak(f"Opening {app_name}")
+    else:
+        speak(f"Sorry, I don't know how to open {app_name}")
