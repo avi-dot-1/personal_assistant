@@ -8,7 +8,8 @@ import os
 import logging
 from speech import listen_for_speech, speak
 from ai import groq_prompt, function_call, handle_coding_task
-from utils import take_screenshot, web_cam_capture, get_clipboard_text, analyze_user_intent, open_app, delete_memory
+from helper import take_screenshot, web_cam_capture, get_clipboard_text, analyze_user_intent, open_app
+from memory import delete_memory
 
 
 logging.getLogger().setLevel(logging.ERROR)
